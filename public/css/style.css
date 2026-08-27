@@ -1422,3 +1422,19 @@ ul {
     flex-wrap: wrap;
   }
 }
+
+.guild-intro-banner {
+  width: 100%;
+  aspect-ratio: 8 / 3;
+  border-radius: var(--radius-md);
+  background-size: cover;
+  background-position: center;
+  background-color: var(--pink-light);
+  margin-bottom: 16px;
+}
+
+@media (max-width: 860px) {
+  .guild-intro-banner {
+    aspect-ratio: 16 / 9;
+  }
+}
