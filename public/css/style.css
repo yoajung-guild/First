@@ -1226,3 +1226,50 @@ ul {
     grid-template-columns: 1fr;
   }
 }
+/* 사진 전체 목록 (4xn) */
+.photo-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* 길드원 카드 아바타에 실제 사진 노출 */
+.member-avatar {
+  background-size: cover;
+  background-position: center;
+}
+
+/* 사진 상세 페이지 큰 이미지 */
+.detail-photo-full {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  background-size: cover;
+  background-position: center;
+  background-color: var(--pink-light);
+  margin-bottom: 16px;
+}
+
+/* 멤버 상세 페이지 큰 아바타 */
+.member-detail-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--pink-light);
+  border: 3px solid var(--pink);
+  margin: 0 auto 16px;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+@media (max-width: 860px) {
+  .photo-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

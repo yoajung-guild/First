@@ -4,15 +4,27 @@
   <%- include('partials/nav') %>
 
   <main class="content">
-    <h2 class="page-title">👥 길드원 리스트 (<%= members.length %>명)</h2>
+    <div class="page-head-row">
+      <h2 class="page-title">👥 길드원 리스트 (<%= members.length %>명)</h2>
+      <% if (currentUser) { %>
+        <button type="button" class="btn-primary btn-sm" onclick="toggleForm('member-write-form')">새 멤버 등록</button>
+      <% } %>
+    </div>
+
+    <% if (currentUser) { %>
+      <!-- TODO(API 연동): POST /api/members 로 교체 -->
+      <form action="/members" method="POST" id="member-write-form" class="write-form hidden">
+        <input type="text" name="nickname" placeholder="닉네임(아이디)" required />
+        <input type="text" name="avatar" placeholder="캐릭터 스크린샷 이미지 URL" />
+        <input type="text" name="intro" placeholder="한줄 소개" required />
+        <button type="submit" class="btn-primary btn-sm">등록하기</button>
+      </form>
+    <% } %>
 
     <section class="member-grid">
-      <!-- TODO(API 연동): GET /api/members 결과로 교체 -->
       <% members.forEach(m => { %>
-        <article class="member-card">
-          <div class="member-avatar <%= m.status === '온라인' ? 'online' : '' %>">
-            <%= m.nickname.charAt(0) %>
-          </div>
+        <a href="/members/<%= m.id %>" class="member-card">
+          <div class="member-avatar <%= m.status === '온라인' ? 'online' : '' %>" style="background-image:url('<%= m.avatar %>')"></div>
           <div class="member-info">
             <div class="member-name-row">
               <span class="member-name"><%= m.nickname %></span>
@@ -24,7 +36,7 @@
           <span class="member-status <%= m.status === '온라인' ? 'is-online' : 'is-offline' %>">
             <%= m.status %>
           </span>
-        </article>
+        </a>
       <% }) %>
     </section>
   </main>

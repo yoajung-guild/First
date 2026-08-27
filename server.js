@@ -20,7 +20,7 @@ app.use(express.json());
 // secret 값은 .env 로 분리하세요.
 app.use(
   session({
-    secret: "yoajeong-guild-secret-key",
+    secret: process.env.SESSION_SECRET || "yoajeong-guild-secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1일
@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// 로그인 필요 라우트 가드
+// 로그인 필요 라우트 가드 (글쓰기/수정/삭제 등 쓰기 작업에만 사용)
 function requireLogin(req, res, next) {
   if (!req.session.user) {
     return res.redirect("/login");
@@ -52,7 +52,6 @@ app.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   // TODO(API 연동): POST /api/auth/login 으로 교체
-  // const result = await authApi.login(username, password);
   const found = users.find((u) => u.username === username && u.password === password);
 
   if (!found) {
@@ -69,8 +68,7 @@ app.post("/logout", (req, res) => {
   });
 });
 
-// ---------- 대시보드(홈) ----------
-// 기존 app.get("/", requireLogin, (req, res) => { ... }) 를 아래로 교체
+// ---------- 대시보드(홈) : 비회원도 접근 가능 ----------
 app.get("/", (req, res) => {
   res.render("index", {
     pageTitle: "홈",
@@ -81,17 +79,9 @@ app.get("/", (req, res) => {
   });
 });
 
-// ---------- 출석체크 ----------
+// ---------- 출석체크 : 조회는 비회원도 가능, 체크는 로그인 필요 ----------
 app.get("/attendance", (req, res) => {
   res.render("attendance", { pageTitle: "출석체크", attendance });
-});
-
-app.post("/attendance/check", requireLogin, (req, res) => {
-  // TODO(API 연동): POST /api/attendance 로 교체 (오늘 날짜 + req.session.user.id 전달)
-  attendance.todayChecked = true;
-  attendance.monthlyCount += 1;
-  attendance.streak += 1;
-  res.redirect("/attendance");
 });
 
 app.post("/attendance/check", requireLogin, (req, res) => {
@@ -113,9 +103,15 @@ app.get("/notice/:id", requireLogin, (req, res) => {
   res.render("notice_detail", { pageTitle: "공지사항", notice });
 });
 
-// ---------- 꿀팁 게시판 ----------
-app.get("/tips", requireLogin, (req, res) => {
-  res.render("tips", { pageTitle: "꿀팁 게시판", tips });
+// ---------- 팁 & 공략 : 조회는 비회원도 가능, 등록/수정/삭제는 로그인 필요 ----------
+app.get("/tips", (req, res) => {
+  res.render("tips", { pageTitle: "팁 & 공략", tips });
+});
+
+app.get("/tips/:id", (req, res) => {
+  const tip = tips.find((t) => t.id === Number(req.params.id));
+  if (!tip) return res.redirect("/tips");
+  res.render("tip_detail", { pageTitle: "팁 & 공략", tip });
 });
 
 app.post("/tips", requireLogin, (req, res) => {
@@ -129,12 +125,7 @@ app.post("/tips", requireLogin, (req, res) => {
     category: category || "기타",
     content,
   });
-  res.redirect("/");
-});
-
-// ---------- 사진 게시판 ----------
-app.get("/photos", requireLogin, (req, res) => {
-  res.render("photos", { pageTitle: "사진첩", photos });
+  res.redirect("/tips");
 });
 
 app.post("/tips/:id/edit", requireLogin, (req, res) => {
@@ -145,20 +136,38 @@ app.post("/tips/:id/edit", requireLogin, (req, res) => {
     tip.category = req.body.category || tip.category;
     tip.content = req.body.content || tip.content;
   }
-  res.redirect("/");
+  res.redirect(`/tips/${req.params.id}`);
+});
+
+app.post("/tips/:id/delete", requireLogin, (req, res) => {
+  // TODO(API 연동): DELETE /api/tips/:id 로 교체
+  const idx = tips.findIndex((t) => t.id === Number(req.params.id));
+  if (idx !== -1) tips.splice(idx, 1);
+  res.redirect("/tips");
+});
+
+// ---------- 나만의 스크린샷 : 조회는 비회원도 가능, 등록/수정/삭제는 로그인 필요 ----------
+app.get("/photos", (req, res) => {
+  res.render("photos", { pageTitle: "나만의 스크린샷", photos });
+});
+
+app.get("/photos/:id", (req, res) => {
+  const photo = photos.find((p) => p.id === Number(req.params.id));
+  if (!photo) return res.redirect("/photos");
+  res.render("photo_detail", { pageTitle: "나만의 스크린샷", photo });
 });
 
 app.post("/photos", requireLogin, (req, res) => {
-  // TODO(API 연동): POST /api/photos (multipart/form-data) 로 교체
+  // TODO(API 연동): POST /api/photos (multipart/form-data, multer 등 사용) 로 교체
   const { title, imageUrl } = req.body;
   photos.unshift({
-    id: photos.length + 1,
+    id: photos.length ? Math.max(...photos.map((p) => p.id)) + 1 : 1,
     title,
     author: req.session.user.nickname,
     date: new Date().toISOString().slice(0, 10),
-    imageUrl: imageUrl || "/images/photos/default.jpg",
+    imageUrl: imageUrl || "https://picsum.photos/seed/default/600/450",
   });
-  res.redirect("/"); // 기존: res.redirect("/photos")
+  res.redirect("/photos");
 });
 
 app.post("/photos/:id/edit", requireLogin, (req, res) => {
@@ -168,19 +177,25 @@ app.post("/photos/:id/edit", requireLogin, (req, res) => {
     photo.title = req.body.title || photo.title;
     photo.imageUrl = req.body.imageUrl || photo.imageUrl;
   }
-  res.redirect("/");
+  res.redirect(`/photos/${req.params.id}`);
 });
 
 app.post("/photos/:id/delete", requireLogin, (req, res) => {
   // TODO(API 연동): DELETE /api/photos/:id 로 교체
   const idx = photos.findIndex((p) => p.id === Number(req.params.id));
   if (idx !== -1) photos.splice(idx, 1);
-  res.redirect("/");
+  res.redirect("/photos");
 });
 
-// ---------- 길드원 리스트 ----------
-app.get("/members", requireLogin, (req, res) => {
+// ---------- 길드원 리스트 : 조회는 비회원도 가능, 등록/수정은 로그인 필요 ----------
+app.get("/members", (req, res) => {
   res.render("members", { pageTitle: "길드원 리스트", members });
+});
+
+app.get("/members/:id", (req, res) => {
+  const member = members.find((m) => m.id === Number(req.params.id));
+  if (!member) return res.redirect("/members");
+  res.render("member_detail", { pageTitle: "길드원 리스트", member });
 });
 
 app.post("/members", requireLogin, (req, res) => {
@@ -197,7 +212,7 @@ app.post("/members", requireLogin, (req, res) => {
     avatar: avatar || "https://i.pravatar.cc/150?img=12",
     intro,
   });
-  res.redirect("/");
+  res.redirect("/members");
 });
 
 app.post("/members/:id/edit", requireLogin, (req, res) => {
@@ -208,7 +223,7 @@ app.post("/members/:id/edit", requireLogin, (req, res) => {
     member.avatar = req.body.avatar || member.avatar;
     member.intro = req.body.intro || member.intro;
   }
-  res.redirect("/");
+  res.redirect(`/members/${req.params.id}`);
 });
 
 app.listen(PORT, () => {

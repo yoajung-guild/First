@@ -1,14 +1,5 @@
-<div
-  class="photo-thumb-card"
-  style="background-image:url('<%= p.imageUrl %>')"
-  onclick="openPhotoDetail(this)"
-  data-id="<%= p.id %>"
-  data-title="<%= p.title %>"
-  data-image="<%= p.imageUrl %>"
-  data-author="<%= p.author %>"
-  data-date="<%= p.date %>"
->
+<a href="/photos/<%= p.id %>" class="photo-thumb-card" style="background-image:url('<%= p.imageUrl %>')">
   <div class="photo-thumb-overlay">
     <span class="photo-thumb-meta"><%= p.author %> · <%= p.date %></span>
   </div>
-</div>
+</a>

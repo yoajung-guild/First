@@ -5,29 +5,26 @@
 
   <main class="content">
     <div class="page-head-row">
-      <h2 class="page-title">📷 사진첩</h2>
-      <button type="button" class="btn-primary btn-sm" onclick="toggleForm('photo-form')">사진 등록</button>
+      <h2 class="page-title">📷 나만의 스크린샷</h2>
+      <% if (currentUser) { %>
+        <button type="button" class="btn-primary btn-sm" onclick="toggleForm('photo-write-form')">사진 등록</button>
+      <% } %>
     </div>
 
-    <!-- TODO(API 연동): POST /api/photos (multipart/form-data, multer 사용) 로 교체 -->
-    <form action="/photos" method="POST" id="photo-form" class="write-form hidden">
-      <input type="text" name="title" placeholder="사진 제목" required />
-      <input type="text" name="imageUrl" placeholder="이미지 URL (실제 구현 시 파일 업로드로 교체)" />
-      <button type="submit" class="btn-primary btn-sm">등록하기</button>
-    </form>
+    <% if (currentUser) { %>
+      <!-- TODO(API 연동): POST /api/photos (multipart/form-data) 로 교체 -->
+      <form action="/photos" method="POST" id="photo-write-form" class="write-form hidden">
+        <input type="text" name="title" placeholder="사진 제목" required />
+        <input type="text" name="imageUrl" placeholder="이미지 URL (실제 구현 시 파일 업로드로 교체)" required />
+        <button type="submit" class="btn-primary btn-sm">등록하기</button>
+      </form>
+    <% } %>
 
-    <section class="photo-grid">
-      <!-- TODO(API 연동): GET /api/photos 결과로 교체 -->
+    <div class="photo-grid-4">
       <% photos.forEach(p => { %>
-        <article class="photo-card">
-          <div class="photo-thumb" style="background-image:url('<%= p.imageUrl %>')"></div>
-          <div class="photo-info">
-            <h3 class="photo-title"><%= p.title %></h3>
-            <span class="photo-meta"><%= p.author %> · <%= p.date %></span>
-          </div>
-        </article>
+        <%- include('partials/photo_thumb', { p }) %>
       <% }) %>
-    </section>
+    </div>
   </main>
 </div>
 

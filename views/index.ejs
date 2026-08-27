@@ -14,15 +14,15 @@
     <section class="panel">
       <div class="panel-head">
         <h3>👥 멤버 소개</h3>
-        <button type="button" class="panel-more" onclick="openModal('member-list-modal')">더보기</button>
+        <a href="/members" class="panel-more">더보기</a>
       </div>
       <div class="member-mini-grid">
         <% members.slice(0, 4).forEach(m => { %>
-          <div class="member-mini-card">
+          <a href="/members/<%= m.id %>" class="member-mini-card">
             <div class="member-mini-avatar" style="background-image:url('<%= m.avatar %>')"></div>
             <span class="member-mini-name"><%= m.nickname %></span>
             <span class="member-mini-intro"><%= m.intro %></span>
-          </div>
+          </a>
         <% }) %>
       </div>
     </section>
@@ -31,7 +31,7 @@
     <section class="panel">
       <div class="panel-head">
         <h3>🍯 팁 &amp; 공략</h3>
-        <button type="button" class="panel-more" onclick="openModal('tip-list-modal')">더보기</button>
+        <a href="/tips" class="panel-more">더보기</a>
       </div>
       <div class="tip-thumb-row">
         <% tips.slice(0, 4).forEach(t => { %>
@@ -44,7 +44,7 @@
     <section class="panel">
       <div class="panel-head">
         <h3>📷 나만의 스크린샷</h3>
-        <button type="button" class="panel-more" onclick="openModal('photo-list-modal')">더보기</button>
+        <a href="/photos" class="panel-more">더보기</a>
       </div>
       <div class="photo-dashboard-grid">
         <% photos.slice(0, 4).forEach(p => { %>
@@ -53,148 +53,6 @@
       </div>
     </section>
   </main>
-</div>
-
-<!-- ===== 멤버 관리 모달 (조회/등록/수정) ===== -->
-<div class="modal-overlay" id="member-list-modal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h3>👥 멤버 소개 전체보기</h3>
-      <button type="button" class="modal-close" onclick="closeModal('member-list-modal')">✕</button>
-    </div>
-
-    <% if (currentUser) { %>
-      <button type="button" class="btn-primary btn-sm" onclick="resetMemberForm()">새 멤버 등록</button>
-      <!-- TODO(API 연동): POST /api/members, PATCH /api/members/:id 로 교체 -->
-      <form action="/members" method="POST" id="member-write-form" class="write-form hidden">
-        <input type="text" name="nickname" placeholder="닉네임(아이디)" required />
-        <input type="text" name="avatar" placeholder="캐릭터 스크린샷 이미지 URL" />
-        <input type="text" name="intro" placeholder="한줄 소개" required />
-        <button type="submit" class="btn-primary btn-sm">저장하기</button>
-      </form>
-    <% } %>
-
-    <div class="modal-grid-2">
-      <% members.forEach(m => { %>
-        <div class="member-manage-card">
-          <div class="member-mini-avatar" style="background-image:url('<%= m.avatar %>')"></div>
-          <div class="member-manage-info">
-            <span class="member-mini-name"><%= m.nickname %></span>
-            <span class="member-mini-intro"><%= m.intro %></span>
-          </div>
-          <% if (currentUser) { %>
-            <button
-              type="button"
-              class="btn-edit-sm"
-              onclick="prepareMemberEdit(this)"
-              data-id="<%= m.id %>"
-              data-nickname="<%= m.nickname %>"
-              data-avatar="<%= m.avatar %>"
-              data-intro="<%= m.intro %>"
-            >수정</button>
-          <% } %>
-        </div>
-      <% }) %>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 팁 목록 모달 (조회/등록/수정, 4xn) ===== -->
-<div class="modal-overlay" id="tip-list-modal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h3>🍯 팁 &amp; 공략 전체보기</h3>
-      <button type="button" class="modal-close" onclick="closeModal('tip-list-modal')">✕</button>
-    </div>
-
-    <% if (currentUser) { %>
-      <button type="button" class="btn-primary btn-sm" onclick="resetTipForm()">글쓰기</button>
-      <!-- TODO(API 연동): POST /api/tips, PATCH /api/tips/:id 로 교체 -->
-      <form action="/tips" method="POST" id="tip-write-form" class="write-form hidden">
-        <select name="category">
-          <option value="성장 공략">성장 공략</option>
-          <option value="장비/강화">장비/강화</option>
-          <option value="전투/PvP">전투/PvP</option>
-          <option value="기타">기타</option>
-        </select>
-        <input type="text" name="title" placeholder="제목" required />
-        <textarea name="content" placeholder="내용" rows="4" required></textarea>
-        <button type="submit" class="btn-primary btn-sm">등록하기</button>
-      </form>
-    <% } %>
-
-    <div class="modal-grid-4">
-      <% tips.forEach(t => { %>
-        <%- include('partials/tip_thumb', { t }) %>
-      <% }) %>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 팁 상세 팝업 (수정/삭제 포함) ===== -->
-<div class="modal-overlay" id="tip-detail-modal">
-  <div class="modal-box modal-box-sm">
-    <div class="modal-head">
-      <h3 id="tip-detail-title">제목</h3>
-      <button type="button" class="modal-close" onclick="closeModal('tip-detail-modal')">✕</button>
-    </div>
-    <p class="detail-meta" id="tip-detail-meta"></p>
-    <p class="detail-body" id="tip-detail-content"></p>
-    <% if (currentUser) { %>
-      <div class="detail-actions">
-        <button type="button" class="btn-primary btn-sm" onclick="editCurrentTip()">수정</button>
-        <form id="tip-delete-form" method="POST" action="">
-          <button type="submit" class="btn-danger btn-sm">삭제하기</button>
-        </form>
-      </div>
-    <% } %>
-  </div>
-</div>
-
-<!-- ===== 사진 목록 모달 (조회/등록/수정, 4xn) ===== -->
-<div class="modal-overlay" id="photo-list-modal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h3>📷 나만의 스크린샷 전체보기</h3>
-      <button type="button" class="modal-close" onclick="closeModal('photo-list-modal')">✕</button>
-    </div>
-
-    <% if (currentUser) { %>
-      <button type="button" class="btn-primary btn-sm" onclick="resetPhotoForm()">사진 등록</button>
-      <!-- TODO(API 연동): POST /api/photos (multipart/form-data), PATCH /api/photos/:id 로 교체 -->
-      <form action="/photos" method="POST" id="photo-write-form" class="write-form hidden">
-        <input type="text" name="title" placeholder="사진 제목" required />
-        <input type="text" name="imageUrl" placeholder="이미지 URL (실제 구현 시 파일 업로드로 교체)" required />
-        <button type="submit" class="btn-primary btn-sm">등록하기</button>
-      </form>
-    <% } %>
-
-    <div class="modal-grid-4">
-      <% photos.forEach(p => { %>
-        <%- include('partials/photo_thumb', { p }) %>
-      <% }) %>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 사진 상세 팝업 (수정/삭제 포함) ===== -->
-<div class="modal-overlay" id="photo-detail-modal">
-  <div class="modal-box modal-box-sm">
-    <div class="modal-head">
-      <h3 id="photo-detail-title">제목</h3>
-      <button type="button" class="modal-close" onclick="closeModal('photo-detail-modal')">✕</button>
-    </div>
-    <div class="detail-photo" id="photo-detail-image"></div>
-    <p class="detail-meta" id="photo-detail-meta"></p>
-    <% if (currentUser) { %>
-      <div class="detail-actions">
-        <button type="button" class="btn-primary btn-sm" onclick="editCurrentPhoto()">수정</button>
-        <form id="photo-delete-form" method="POST" action="">
-          <button type="submit" class="btn-danger btn-sm">삭제하기</button>
-        </form>
-      </div>
-    <% } %>
-  </div>
 </div>
 
 <%- include('partials/footer') %>
