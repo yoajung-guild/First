@@ -76,6 +76,8 @@ app.get("/", (req, res) => {
     members,
     tips,
     photos,
+    polls
+
   });
 });
 
@@ -224,6 +226,68 @@ app.post("/members/:id/edit", requireLogin, (req, res) => {
     member.intro = req.body.intro || member.intro;
   }
   res.redirect(`/members/${req.params.id}`);
+});
+// ---------- 투표게시판 : 조회는 비회원도 가능, 투표/등록/삭제는 로그인 필요 ----------
+app.get("/polls", (req, res) => {
+  res.render("polls", { pageTitle: "투표게시판", polls });
+});
+
+app.get("/polls/:id", (req, res) => {
+  const poll = polls.find((p) => p.id === Number(req.params.id));
+  if (!poll) return res.redirect("/polls");
+
+  // 현재 로그인한 유저가 이미 투표한 항목이 있는지 확인
+  let userVotedOptionId = null;
+  if (req.session.user) {
+    const votedOption = poll.options.find((o) => o.votes.includes(req.session.user.nickname));
+    if (votedOption) userVotedOptionId = votedOption.id;
+  }
+
+  res.render("poll_detail", { pageTitle: "투표게시판", poll, userVotedOptionId });
+});
+
+app.post("/polls", requireLogin, (req, res) => {
+  // TODO(API 연동): POST /api/polls 로 교체
+  const { title, type, description, deadline, optionsText } = req.body;
+  const optionLabels = optionsText
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  polls.unshift({
+    id: polls.length ? Math.max(...polls.map((p) => p.id)) + 1 : 1,
+    title,
+    type: type || "기타",
+    description,
+    author: req.session.user.nickname,
+    date: new Date().toISOString().slice(0, 10),
+    deadline,
+    options: optionLabels.map((label, idx) => ({ id: idx + 1, label, votes: [] })),
+  });
+
+  res.redirect("/polls");
+});
+
+app.post("/polls/:id/vote", requireLogin, (req, res) => {
+  // TODO(API 연동): POST /api/polls/:id/vote 로 교체
+  const poll = polls.find((p) => p.id === Number(req.params.id));
+  if (poll) {
+    const optionId = Number(req.body.optionId);
+    // 기존 투표 제거 (한 사람당 한 항목만, 재투표 시 변경됨)
+    poll.options.forEach((o) => {
+      o.votes = o.votes.filter((v) => v !== req.session.user.nickname);
+    });
+    const target = poll.options.find((o) => o.id === optionId);
+    if (target) target.votes.push(req.session.user.nickname);
+  }
+  res.redirect(`/polls/${req.params.id}`);
+});
+
+app.post("/polls/:id/delete", requireLogin, (req, res) => {
+  // TODO(API 연동): DELETE /api/polls/:id 로 교체
+  const idx = polls.findIndex((p) => p.id === Number(req.params.id));
+  if (idx !== -1) polls.splice(idx, 1);
+  res.redirect("/polls");
 });
 
 app.listen(PORT, () => {

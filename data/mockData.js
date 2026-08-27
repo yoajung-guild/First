@@ -75,4 +75,35 @@ const users =
 
 ];
 
-module.exports = { guildIntro, members, notices, tips, photos, attendance, users };
+// TODO(API 연동): GET/POST/DELETE /api/polls, POST /api/polls/:id/vote 로 교체
+const polls = [
+  {
+    id: 2,
+    title: "9월 정기 연주회 날짜 투표",
+    type: "연주회",
+    description: "길드 정기 연주회 날짜를 골라주세요! 다수결로 확정됩니다.",
+    author: "구름위음유",
+    date: "2026-08-25",
+    deadline: "2026-08-29",
+    options: [
+      { id: 1, label: "9/5(토) 오후 8시", votes: ["요아정길드장", "딸기힐러"] },
+      { id: 2, label: "9/6(일) 오후 3시", votes: ["달빛궁수"] },
+      { id: 3, label: "9/12(토) 오후 8시", votes: [] },
+    ],
+  },
+  {
+    id: 1,
+    title: "이번 주 어비스 진행 요일 투표",
+    type: "어비스",
+    description: "이번 주 어비스 같이 가실 분들, 편한 요일/시간 골라주세요.",
+    author: "요아정길드장",
+    date: "2026-08-24",
+    deadline: "2026-08-28",
+    options: [
+      { id: 1, label: "8/30(토) 저녁 9시", votes: ["달빛궁수", "초코마법사", "바닐라도적"] },
+      { id: 2, label: "8/31(일) 오후 3시", votes: ["딸기힐러"] },
+      { id: 3, label: "8/31(일) 저녁 9시", votes: ["라떼전사", "블랙베리궁수"] },
+    ],
+  }
+];
+module.exports = { guildIntro, members, notices, tips, photos, polls, attendance, users };
