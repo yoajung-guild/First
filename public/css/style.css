@@ -1273,3 +1273,82 @@ ul {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* =========================================================
+   출석체크 / 사진첩 / 길드원 페이지 - 화면 크기에 맞게 확대
+========================================================= */
+
+/* 출석체크: PC에서는 출석카드 + 랭킹 2단 레이아웃 */
+.attendance-page-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.attendance-card {
+  padding: 44px 32px;
+  text-align: center;
+}
+
+.attendance-check-circle {
+  width: clamp(150px, 18vw, 220px);
+  height: clamp(150px, 18vw, 220px);
+  font-size: 1.1rem;
+}
+
+.summary-num {
+  font-size: 1.7rem;
+}
+
+.summary-label {
+  font-size: 0.85rem;
+}
+
+.rank-table th,
+.rank-table td {
+  padding: 14px 10px;
+  font-size: 0.95rem;
+}
+
+/* 사진첩: 화면 폭에 따라 카드 크기가 자동으로 커지고, 비율도 4:3으로 */
+.photo-grid-4 {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.photo-grid-4 .photo-thumb-card {
+  aspect-ratio: 4 / 3;
+}
+
+/* 길드원 리스트: 카드가 더 크고 여유있게, 화면 폭에 맞춰 개수 자동 조절 */
+.member-grid {
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.member-card {
+  padding: 22px;
+  gap: 16px;
+}
+
+.member-avatar {
+  width: 64px;
+  height: 64px;
+  font-size: 1.2rem;
+}
+
+.member-name {
+  font-size: 1rem;
+}
+
+.member-sub {
+  font-size: 0.85rem;
+}
+
+/* 모바일에서는 출석체크 2단 레이아웃 → 1단으로 */
+@media (max-width: 860px) {
+  .attendance-page-grid {
+    grid-template-columns: 1fr;
+  }
+}
