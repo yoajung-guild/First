@@ -1,7 +1,7 @@
 {
   "name": "yoajeong-guild",
   "version": "1.0.0",
-  "description": "마비노기 모바일 길드 [요아정] 길드원 커뮤니티 웹뷰",
+  "description": "마비노기 모바일 길드 [요아정] ",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

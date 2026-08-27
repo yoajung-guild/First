@@ -100,17 +100,19 @@ const attendance = {
   monthlyCount: 14, // 이번 달 누적 출석 일수
   streak: 5, // 연속 출석일
   ranking: [
-    { rank: 1, nickname: "요아정길드장", count: 24 },
-    { rank: 2, nickname: "달빛궁수", count: 22 },
-    { rank: 3, nickname: "딸기힐러", count: 20 },
-    { rank: 4, nickname: "초코마법사", count: 18 },
-    { rank: 5, nickname: "구름위음유", count: 16 },
+    { rank: 1, nickname: "자몽톡톡", count: 24 },
+    { rank: 2, nickname: "망고빙수", count: 24 },
+    { rank: 3, nickname: "오뜨야", count: 20 },
+    { rank: 4, nickname: "사생", count: 18 },
   ],
 };
 
 // TODO(API 연동): POST /api/login -> 실제 인증 서버/DB 검증 로직으로 교체
 const users = [
-  { id: 1, username: "guildmaster", password: "1234", nickname: "요아정길드장" },
+  { id: 1, username: "admin", password: "1234", nickname: "자몽톡톡(길드마스터)" },
+  { id: 2, username: "admin", password: "1234", nickname: "망고빙수(부길드마스터)" },
+  { id: 3, username: "admin", password: "1234", nickname: "오뜨야(부길드마스터)" },
+  { id: 4, username: "user1", password: "1111", nickname: "사생" },
 ];
 
 module.exports = { members, notices, tips, photos, attendance, users };
