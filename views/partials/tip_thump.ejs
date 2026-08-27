@@ -1,0 +1,16 @@
+<div
+  class="tip-thumb-card"
+  style="background-image:url('<%= t.thumbnail %>')"
+  onclick="openTipDetail(this)"
+  data-id="<%= t.id %>"
+  data-title="<%= t.title %>"
+  data-thumbnail="<%= t.thumbnail %>"
+  data-content="<%= t.content %>"
+  data-author="<%= t.author %>"
+  data-date="<%= t.date %>"
+>
+  <div class="tip-thumb-overlay">
+    <span class="tip-thumb-title"><%= t.title %></span>
+    <span class="tip-thumb-meta"><%= t.author %> · <%= t.date %></span>
+  </div>
+</div>

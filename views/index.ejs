@@ -4,109 +4,151 @@
   <%- include('partials/nav') %>
 
   <main class="content">
-    <section class="hero-card">
-      <section class="hero-card">
-    <div class="hero-text">
-      <% if (currentUser) { %>
-        <h2>안녕하세요, <%= currentUser.nickname %>님! 🍨</h2>
-        <p>오늘도 요아정 길드와 함께 즐거운 마비노기 되세요.</p>
-      <% } else { %>
-        <h2>안녕하세요, 요아정 길드입니다! 🍨</h2>
-        <p>둘러보시고, 출석체크나 글쓰기는 로그인 후 이용해주세요.</p>
-      <% } %>
-    </div>  
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-num"><%= memberCount %></span>
-          <span class="hero-stat-label">길드원</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num"><%= attendance.monthlyCount %></span>
-          <span class="hero-stat-label">이번달 출석</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num"><%= attendance.streak %></span>
-          <span class="hero-stat-label">연속 출석</span>
-        </div>
+    <!-- 길드 소개 -->
+    <section class="panel guild-intro">
+      <h2 class="page-title"><%= guildIntro.title %></h2>
+      <p class="guild-intro-desc"><%= guildIntro.description %></p>
+      <div class="guild-intro-images">
+        <% guildIntro.images.forEach(img => { %>
+          <div class="guild-intro-img" style="background-image:url('<%= img %>')"></div>
+        <% }) %>
       </div>
     </section>
 
-    <div class="grid-2">
-      <!-- 공지사항 요약 -->
-      <section class="panel">
-        <div class="panel-head">
-          <h3>📢 고정 공지</h3>
-          <a href="/notice" class="panel-more">더보기</a>
-        </div>
-        <ul class="list-simple">
-          <% pinnedNotices.forEach(n => { %>
-            <li>
-              <a href="/notice/<%= n.id %>">
-                <span class="badge-pin">고정</span>
-                <span class="list-title"><%= n.title %></span>
-                <span class="list-date"><%= n.date %></span>
-              </a>
-            </li>
-          <% }) %>
-        </ul>
-      </section>
+    <!-- 멤버 소개 -->
+    <section class="panel">
+      <div class="panel-head"><h3>👥 멤버 소개</h3></div>
+      <div class="member-mini-grid">
+        <% members.forEach(m => { %>
+          <div class="member-mini-card">
+            <div class="member-mini-avatar" style="background-image:url('<%= m.avatar %>')"></div>
+            <span class="member-mini-name"><%= m.nickname %></span>
+            <span class="member-mini-intro"><%= m.intro %></span>
+          </div>
+        <% }) %>
+      </div>
+    </section>
 
-      <!-- 출석 카드 -->
-      <section class="panel">
-        <div class="panel-head">
-          <h3>📅 오늘의 출석</h3>
-          <a href="/attendance" class="panel-more">더보기</a>
-        </div>
-        <div class="attendance-mini">
-          <% if (attendance.todayChecked) { %>
-            <p class="attendance-mini-msg done">오늘 출석 완료! 🎉</p>
-          <% } else { %>
-            <p class="attendance-mini-msg">아직 출석 전이에요.</p>
-            <form action="/attendance/check" method="POST">
-              <button type="submit" class="btn-primary btn-sm">출석체크 하기</button>
-            </form>
-          <% } %>
-        </div>
-      </section>
-    </div>
+    <!-- 팁 & 공략 -->
+    <section class="panel">
+      <div class="panel-head">
+        <h3>🍯 팁 &amp; 공략</h3>
+        <button type="button" class="panel-more" onclick="openModal('tip-list-modal')">더보기</button>
+      </div>
+      <div class="tip-thumb-row">
+        <% tips.slice(0, 4).forEach(t => { %>
+          <%- include('partials/tip_thumb', { t }) %>
+        <% }) %>
+      </div>
+    </section>
 
-    <div class="grid-2">
-      <!-- 꿀팁 최신글 -->
-      <section class="panel">
-        <div class="panel-head">
-          <h3>🍯 최신 꿀팁</h3>
-          <a href="/tips" class="panel-more">더보기</a>
-        </div>
-        <ul class="list-simple">
-          <% latestTips.forEach(t => { %>
-            <li>
-              <a href="/tips">
-                <span class="badge-cat"><%= t.category %></span>
-                <span class="list-title"><%= t.title %></span>
-                <span class="list-date"><%= t.date %></span>
-              </a>
-            </li>
-          <% }) %>
-        </ul>
-      </section>
-
-      <!-- 사진첩 최신 -->
-      <section class="panel">
-        <div class="panel-head">
-          <h3>📷 최신 사진</h3>
-          <a href="/photos" class="panel-more">더보기</a>
-        </div>
-        <div class="photo-mini-grid">
-          <% latestPhotos.forEach(p => { %>
-            <div class="photo-mini">
-              <div class="photo-mini-thumb" style="background-image:url('<%= p.imageUrl %>')"></div>
-              <span class="photo-mini-title"><%= p.title %></span>
-            </div>
-          <% }) %>
-        </div>
-      </section>
-    </div>
+    <!-- 나만의 스크린샷 -->
+    <section class="panel">
+      <div class="panel-head">
+        <h3>📷 나만의 스크린샷</h3>
+        <button type="button" class="panel-more" onclick="openModal('photo-list-modal')">더보기</button>
+      </div>
+      <div class="photo-dashboard-grid">
+        <% photos.slice(0, 4).forEach(p => { %>
+          <%- include('partials/photo_thumb', { p }) %>
+        <% }) %>
+      </div>
+    </section>
   </main>
+</div>
+
+<!-- ===== 팁 목록 모달 (4xn) ===== -->
+<div class="modal-overlay" id="tip-list-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>🍯 팁 &amp; 공략 전체보기</h3>
+      <button type="button" class="modal-close" onclick="closeModal('tip-list-modal')">✕</button>
+    </div>
+
+    <% if (currentUser) { %>
+      <button type="button" class="btn-primary btn-sm" onclick="toggleForm('tip-write-form')">글쓰기</button>
+      <!-- TODO(API 연동): POST /api/tips 로 교체 -->
+      <form action="/tips" method="POST" id="tip-write-form" class="write-form hidden">
+        <select name="category">
+          <option value="성장 공략">성장 공략</option>
+          <option value="장비/강화">장비/강화</option>
+          <option value="전투/PvP">전투/PvP</option>
+          <option value="기타">기타</option>
+        </select>
+        <input type="text" name="title" placeholder="제목" required />
+        <input type="text" name="thumbnail" placeholder="썸네일 이미지 URL" />
+        <textarea name="content" placeholder="내용" rows="4" required></textarea>
+        <button type="submit" class="btn-primary btn-sm">등록하기</button>
+      </form>
+    <% } %>
+
+    <div class="modal-grid-4">
+      <% tips.forEach(t => { %>
+        <%- include('partials/tip_thumb', { t }) %>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 팁 상세 팝업 ===== -->
+<div class="modal-overlay" id="tip-detail-modal">
+  <div class="modal-box modal-box-sm">
+    <div class="modal-head">
+      <h3 id="tip-detail-title">제목</h3>
+      <button type="button" class="modal-close" onclick="closeModal('tip-detail-modal')">✕</button>
+    </div>
+    <div class="detail-thumb" id="tip-detail-thumb"></div>
+    <p class="detail-meta" id="tip-detail-meta"></p>
+    <p class="detail-body" id="tip-detail-content"></p>
+    <% if (currentUser) { %>
+      <form id="tip-delete-form" method="POST" action="">
+        <button type="submit" class="btn-danger btn-sm">삭제하기</button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<!-- ===== 사진 목록 모달 (4xn) ===== -->
+<div class="modal-overlay" id="photo-list-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>📷 나만의 스크린샷 전체보기</h3>
+      <button type="button" class="modal-close" onclick="closeModal('photo-list-modal')">✕</button>
+    </div>
+
+    <% if (currentUser) { %>
+      <button type="button" class="btn-primary btn-sm" onclick="toggleForm('photo-write-form')">사진 등록</button>
+      <!-- TODO(API 연동): POST /api/photos (multipart/form-data) 로 교체 -->
+      <form action="/photos" method="POST" id="photo-write-form" class="write-form hidden">
+        <input type="text" name="title" placeholder="사진 제목" required />
+        <input type="text" name="imageUrl" placeholder="이미지 URL (실제 구현 시 파일 업로드로 교체)" />
+        <button type="submit" class="btn-primary btn-sm">등록하기</button>
+      </form>
+    <% } %>
+
+    <div class="modal-grid-4">
+      <% photos.forEach(p => { %>
+        <%- include('partials/photo_thumb', { p }) %>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 사진 상세 팝업 ===== -->
+<div class="modal-overlay" id="photo-detail-modal">
+  <div class="modal-box modal-box-sm">
+    <div class="modal-head">
+      <h3 id="photo-detail-title">제목</h3>
+      <button type="button" class="modal-close" onclick="closeModal('photo-detail-modal')">✕</button>
+    </div>
+    <div class="detail-photo" id="photo-detail-image"></div>
+    <p class="detail-meta" id="photo-detail-meta"></p>
+    <% if (currentUser) { %>
+      <form id="photo-delete-form" method="POST" action="">
+        <button type="submit" class="btn-danger btn-sm">삭제하기</button>
+      </form>
+    <% } %>
+  </div>
 </div>
 
 <%- include('partials/footer') %>

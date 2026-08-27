@@ -4,7 +4,7 @@ const path = require("path");
 
 // TODO(API 연동): 지금은 로컬 목업 데이터를 사용합니다.
 // 실제 서비스 전환 시 이 require 대신 API 클라이언트(axios 등)로 교체하세요.
-const { members, notices, tips, photos, attendance, users } = require("./data/mockData");
+const { guildIntro, members, notices, tips, photos, attendance, users } = require("./data/mockData");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -70,14 +70,14 @@ app.post("/logout", (req, res) => {
 });
 
 // ---------- 대시보드(홈) ----------
+// 기존 app.get("/", requireLogin, (req, res) => { ... }) 를 아래로 교체
 app.get("/", (req, res) => {
   res.render("index", {
     pageTitle: "홈",
-    pinnedNotices: notices.filter((n) => n.pinned).slice(0, 2),
-    latestTips: tips.slice(0, 3),
-    latestPhotos: photos.slice(0, 3),
-    memberCount: members.length,
-    attendance,
+    guildIntro,
+    members,
+    tips,
+    photos,
   });
 });
 
@@ -120,7 +120,7 @@ app.get("/tips", requireLogin, (req, res) => {
 
 app.post("/tips", requireLogin, (req, res) => {
   // TODO(API 연동): POST /api/tips 로 교체
-  const { title, category, content } = req.body;
+  const { title, category, content, thumbnail } = req.body;
   tips.unshift({
     id: tips.length + 1,
     title,
@@ -128,9 +128,10 @@ app.post("/tips", requireLogin, (req, res) => {
     date: new Date().toISOString().slice(0, 10),
     category: category || "기타",
     likes: 0,
+    thumbnail: thumbnail || "/images/tips/default.jpg",
     content,
   });
-  res.redirect("/tips");
+  res.redirect("/"); // 기존: res.redirect("/tips")
 });
 
 // ---------- 사진 게시판 ----------
@@ -138,17 +139,31 @@ app.get("/photos", requireLogin, (req, res) => {
   res.render("photos", { pageTitle: "사진첩", photos });
 });
 
+app.post("/tips/:id/delete", requireLogin, (req, res) => {
+  // TODO(API 연동): DELETE /api/tips/:id 로 교체
+  const idx = tips.findIndex((t) => t.id === Number(req.params.id));
+  if (idx !== -1) tips.splice(idx, 1);
+  res.redirect("/");
+});
+
 app.post("/photos", requireLogin, (req, res) => {
-  // TODO(API 연동): POST /api/photos (multipart/form-data, multer 등 사용) 로 교체
+  // TODO(API 연동): POST /api/photos (multipart/form-data) 로 교체
   const { title, imageUrl } = req.body;
   photos.unshift({
     id: photos.length + 1,
     title,
     author: req.session.user.nickname,
     date: new Date().toISOString().slice(0, 10),
-    imageUrl: imageUrl || "/images/sample1.jpg",
+    imageUrl: imageUrl || "/images/photos/default.jpg",
   });
-  res.redirect("/photos");
+  res.redirect("/"); // 기존: res.redirect("/photos")
+});
+
+app.post("/photos/:id/delete", requireLogin, (req, res) => {
+  // TODO(API 연동): DELETE /api/photos/:id 로 교체
+  const idx = photos.findIndex((p) => p.id === Number(req.params.id));
+  if (idx !== -1) photos.splice(idx, 1);
+  res.redirect("/");
 });
 
 // ---------- 길드원 리스트 ----------

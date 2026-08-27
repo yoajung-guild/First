@@ -912,3 +912,226 @@ ul {
     gap: 10px;
   }
 }
+
+/* =========================================================
+   대시보드 신규 섹션 (길드소개 / 멤버소개 / 팁 / 스크린샷)
+========================================================= */
+.guild-intro-desc {
+  color: var(--gray-text);
+  line-height: 1.7;
+  white-space: pre-line;
+  font-size: 0.9rem;
+}
+
+.guild-intro-images {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.guild-intro-img {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  background-size: cover;
+  background-position: center;
+  background-color: var(--pink-light);
+}
+
+.member-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.member-mini-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.member-mini-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--pink-light);
+  border: 2px solid var(--pink);
+}
+
+.member-mini-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--brown-deep);
+}
+
+.member-mini-intro {
+  font-size: 0.72rem;
+  color: var(--gray-text);
+}
+
+.tip-thumb-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.photo-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.tip-thumb-card,
+.photo-thumb-card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-md);
+  background-size: cover;
+  background-position: center;
+  background-color: var(--pink-light);
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.tip-thumb-overlay,
+.photo-thumb-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(74, 44, 29, 0.8), transparent);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tip-thumb-title {
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tip-thumb-meta,
+.photo-thumb-meta {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.66rem;
+}
+
+.panel-more {
+  background: none;
+  font-size: 0.82rem;
+  color: var(--pink-deep);
+  font-weight: 600;
+}
+
+/* =========================================================
+   모달(팝업)
+========================================================= */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(74, 44, 29, 0.45);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-box {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 760px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-box-sm {
+  max-width: 420px;
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.modal-head h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--brown-deep);
+}
+
+.modal-close {
+  background: none;
+  font-size: 1.1rem;
+  color: var(--brown);
+  line-height: 1;
+}
+
+.modal-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.detail-thumb,
+.detail-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  background-size: cover;
+  background-position: center;
+  background-color: var(--pink-light);
+  margin-bottom: 12px;
+}
+
+.detail-meta {
+  font-size: 0.78rem;
+  color: var(--gray-text);
+  margin: 0 0 8px;
+}
+
+.detail-body {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--brown-deep);
+  white-space: pre-line;
+  margin: 0 0 16px;
+}
+
+.btn-danger {
+  background: #e0729b;
+  color: var(--white);
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* 반응형: 모바일에서 그리드 컬럼 축소 */
+@media (max-width: 860px) {
+  .guild-intro-images,
+  .member-mini-grid,
+  .tip-thumb-row,
+  .modal-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
