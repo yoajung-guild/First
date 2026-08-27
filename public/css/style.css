@@ -1352,3 +1352,73 @@ ul {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   내 프로필 카드 (대시보드)
+========================================================= */
+.my-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.my-profile-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--pink-light);
+  border: 2px solid var(--pink);
+  flex-shrink: 0;
+}
+
+.my-profile-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.my-profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.my-profile-name {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--brown-deep);
+}
+
+.my-profile-role {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: var(--white);
+}
+
+.role-badge-마스터   { background: var(--pink-deep); }
+.role-badge-부마스터 { background: var(--pink-strong); }
+.role-badge-길드원   { background: var(--brown-light); }
+
+.my-profile-attendance {
+  font-size: 0.82rem;
+  color: var(--gray-text);
+}
+
+.my-profile-checked {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--pink-deep);
+  flex-shrink: 0;
+}
+
+@media (max-width: 860px) {
+  .my-profile-card {
+    flex-wrap: wrap;
+  }
+}

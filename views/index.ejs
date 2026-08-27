@@ -9,6 +9,35 @@
       <h2 class="page-title"><%= guildIntro.title %></h2>
       <p class="guild-intro-desc"><%= guildIntro.description %></p>
     </section>
+    <!-- 길드 소개 -->
+<section class="panel guild-intro">
+  <div class="guild-intro-banner" style="background-image:url('<%= guildIntro.bannerImage %>')"></div>
+  <h2 class="page-title"><%= guildIntro.title %></h2>
+  <p class="guild-intro-desc"><%= guildIntro.description %></p>
+</section>
+
+<!-- 내 프로필 (로그인한 경우에만 표시) -->
+<% if (currentUser) { %>
+  <section class="panel my-profile-card">
+    <div class="my-profile-avatar" style="background-image:url('<%= currentUser.avatar %>')"></div>
+    <div class="my-profile-info">
+      <div class="my-profile-name-row">
+        <span class="my-profile-name"><%= currentUser.nickname %></span>
+        <span class="my-profile-role role-badge-<%= currentUser.role %>"><%= currentUser.role %></span>
+      </div>
+      <span class="my-profile-attendance">이번 달 출석 <%= attendance.monthlyCount %>일</span>
+    </div>
+
+    <% if (attendance.todayChecked) { %>
+      <span class="my-profile-checked">✅ 오늘 출석 완료</span>
+    <% } else { %>
+      <!-- TODO(API 연동): POST /api/attendance 로 교체 -->
+      <form action="/attendance/check" method="POST">
+        <button type="submit" class="btn-primary btn-sm">출석하기</button>
+      </form>
+    <% } %>
+  </section>
+<% } %>
 
     <!-- 멤버 소개 -->
     <section class="panel">

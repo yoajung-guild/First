@@ -69,9 +69,9 @@ const attendance = {
 // TODO(API 연동): POST /api/login -> 실제 인증 서버/DB 검증 로직으로 교체
 const users = 
 [
-  { id: 1, username: "admin", password: "1234", nickname: "자몽톡톡" },
-  { id: 2, username: "admin1", password: "1234", nickname: "망고빙수" },
-  { id: 3, username: "admin2", password: "1234", nickname: "오뜨야" }
+  { id: 1, username: "admin", role: "master", password: "1234", nickname: "자몽톡톡" },
+  { id: 2, username: "admin1", password: "1234", role: "submaster", nickname: "망고빙수" },
+  { id: 3, username: "admin2", password: "1234", role: "submaster", nickname: "오뜨야" }
 
 ];
 

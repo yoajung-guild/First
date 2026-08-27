@@ -57,7 +57,13 @@ app.post("/login", (req, res) => {
     return res.render("login", { error: "아이디 또는 비밀번호가 올바르지 않습니다." });
   }
 
-  req.session.user = { id: found.id, username: found.username, nickname: found.nickname };
+  req.session.user = {
+    id: found.id,
+    username: found.username,
+    nickname: found.nickname,
+    avatar: found.avatar,
+    role: found.role,
+  };
   res.redirect("/");
 });
 
@@ -75,8 +81,8 @@ app.get("/", (req, res) => {
     members,
     tips,
     photos,
-    polls
-
+    polls,
+    attendance
   });
 });
 
