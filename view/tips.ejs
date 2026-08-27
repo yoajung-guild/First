@@ -1,0 +1,42 @@
+<%- include('partials/header') %>
+
+<div class="layout">
+  <%- include('partials/nav') %>
+
+  <main class="content">
+    <div class="page-head-row">
+      <h2 class="page-title">🍯 꿀팁 게시판</h2>
+      <button type="button" class="btn-primary btn-sm" onclick="toggleForm('tip-form')">글쓰기</button>
+    </div>
+
+    <!-- TODO(API 연동): POST /api/tips 로 교체 -->
+    <form action="/tips" method="POST" id="tip-form" class="write-form hidden">
+      <select name="category">
+        <option value="성장 공략">성장 공략</option>
+        <option value="장비/강화">장비/강화</option>
+        <option value="전투/PvP">전투/PvP</option>
+        <option value="기타">기타</option>
+      </select>
+      <input type="text" name="title" placeholder="제목을 입력하세요" required />
+      <textarea name="content" placeholder="꿀팁 내용을 입력하세요" rows="4" required></textarea>
+      <button type="submit" class="btn-primary btn-sm">등록하기</button>
+    </form>
+
+    <section class="tip-grid">
+      <!-- TODO(API 연동): GET /api/tips 결과로 교체 -->
+      <% tips.forEach(t => { %>
+        <article class="tip-card">
+          <span class="badge-cat"><%= t.category %></span>
+          <h3 class="tip-title"><%= t.title %></h3>
+          <p class="tip-content"><%= t.content %></p>
+          <div class="tip-footer">
+            <span><%= t.author %> · <%= t.date %></span>
+            <span class="tip-likes">❤️ <%= t.likes %></span>
+          </div>
+        </article>
+      <% }) %>
+    </section>
+  </main>
+</div>
+
+<%- include('partials/footer') %>
