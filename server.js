@@ -70,7 +70,7 @@ app.post("/logout", (req, res) => {
 });
 
 // ---------- 대시보드(홈) ----------
-app.get("/", requireLogin, (req, res) => {
+app.get("/", (req, res) => {
   res.render("index", {
     pageTitle: "홈",
     pinnedNotices: notices.filter((n) => n.pinned).slice(0, 2),
@@ -82,8 +82,16 @@ app.get("/", requireLogin, (req, res) => {
 });
 
 // ---------- 출석체크 ----------
-app.get("/attendance", requireLogin, (req, res) => {
+app.get("/attendance", (req, res) => {
   res.render("attendance", { pageTitle: "출석체크", attendance });
+});
+
+app.post("/attendance/check", requireLogin, (req, res) => {
+  // TODO(API 연동): POST /api/attendance 로 교체 (오늘 날짜 + req.session.user.id 전달)
+  attendance.todayChecked = true;
+  attendance.monthlyCount += 1;
+  attendance.streak += 1;
+  res.redirect("/attendance");
 });
 
 app.post("/attendance/check", requireLogin, (req, res) => {

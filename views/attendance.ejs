@@ -11,15 +11,17 @@
         <span><%= attendance.todayChecked ? "출석완료" : "출석전" %></span>
       </div>
 
-      <% if (attendance.todayChecked) { %>
-        <p class="attendance-msg">오늘 출석체크를 완료했어요! 내일 또 만나요 🍨</p>
-      <% } else { %>
-        <!-- TODO(API 연동): POST /api/attendance 로 교체, 서버에서 오늘 날짜 기준 중복 출석 방지 처리 -->
-        <form action="/attendance/check" method="POST">
-          <button type="submit" class="btn-primary">오늘 출석체크 하기</button>
-        </form>
-      <% } %>
-
+      <% if (!currentUser) { %>
+    <p class="attendance-msg">출석체크는 로그인 후 이용할 수 있어요.</p>
+    <a href="/login" class="btn-primary">로그인 하러 가기</a>
+     <% } else if (attendance.todayChecked) { %>
+    <p class="attendance-msg">오늘 출석체크를 완료했어요! 내일 또 만나요 🍨</p>
+    <% } else { %>
+    <!-- TODO(API 연동): POST /api/attendance 로 교체, 서버에서 오늘 날짜 기준 중복 출석 방지 처리 -->
+    <form action="/attendance/check" method="POST">
+      <button type="submit" class="btn-primary">오늘 출석체크 하기</button>
+    </form>
+     <% } %>
       <div class="attendance-summary">
         <div class="summary-box">
           <span class="summary-num"><%= attendance.monthlyCount %>일</span>
