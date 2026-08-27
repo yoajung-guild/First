@@ -12,7 +12,7 @@
 const guildIntro = {
   title: "",
   description: "",
-  bannerImage: "/images/mainbanner.png",
+  bannerImage: "/images/mainbanner.jpg",
 };
 
 // TODO(API 연동): GET /api/members  ->  길드원 목록 조회로 교체
