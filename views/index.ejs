@@ -4,12 +4,10 @@
   <%- include('partials/nav') %>
 
   <main class="content">
-    <!-- 길드 소개 -->
-    <section class="panel guild-intro">
-      <h2 class="page-title"><%= guildIntro.title %></h2>
-      <p class="guild-intro-desc"><%= guildIntro.description %></p>
-    </section>
-
+<!-- 길드 소개 -->
+<section class="panel guild-intro">
+  <div class="guild-intro-banner" style="background-image:url('<%= guildIntro.bannerImage %>')"></div>
+</section>
 
 <!-- 내 프로필 (로그인한 경우에만 표시) -->
 <% if (currentUser) { %>
