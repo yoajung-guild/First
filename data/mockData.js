@@ -15,18 +15,18 @@ const guildIntro = {
     "요아정은 '천천히, 그러나 함께' 를 지향하는 마비노기 모바일 길드입니다.\n초보자도 편하게 적응할 수 있는 분위기를 만들고,\n주 1회 정기 레이드와 자유로운 소통을 이어가고 있어요.",
   // TODO(API 연동): 실제 서비스에서는 업로드된 길드 이미지 URL 배열로 교체
   images: [
-    "/images/guild/1.jpg",
-    "/images/guild/2.jpg",
-    "/images/guild/3.jpg",
-    "/images/guild/4.jpg",
+    // "/images/guild/1.jpg",
+    // "/images/guild/2.jpg",
+    // "/images/guild/3.jpg",
+    // "/images/guild/4.jpg",
   ],
 };
 
 // TODO(API 연동): GET /api/members  ->  길드원 목록 조회로 교체
 const members = [
-  { id: 1, nickname: "자몽톡톡", job: "대검전사", level: 100, role: "길드장", joinDate: "2023-11-02", status: "온라인", avatar: "/images/members/1.jpg", intro: "레이드는 제가 이끕니다!" },
-  { id: 2, nickname: "망고빙수", job: "화염술사", level: 100, role: "부길드장", joinDate: "2023-12-15", status: "온라인", avatar: "/images/members/2.jpg", intro: " 딜량 1등 도전 중" },
-  { id: 3, nickname: "오뜨야", job: "화염술사", level: 100, role: "부길드장", joinDate: "2024-01-20", status: "오프라인", avatar: "/images/members/3.jpg", intro: "마법사 육성 꿀팁 물어보세요" },
+  { id: 1, nickname: "자몽톡톡", job: "대검전사", level: 100, role: "길드장", joinDate: "2023-11-02", status: "온라인", avatar: "", intro: "레이드는 제가 이끕니다!" },
+  { id: 2, nickname: "망고빙수", job: "화염술사", level: 100, role: "부길드장", joinDate: "2023-12-15", status: "온라인", avatar: "", intro: " 딜량 1등 도전 중" },
+  { id: 3, nickname: "오뜨야", job: "화염술사", level: 100, role: "부길드장", joinDate: "2024-01-20", status: "오프라인", avatar: "", intro: "마법사 육성 꿀팁 물어보세요" },
 ];
 
 // TODO(API 연동): GET /api/notices  ->  공지사항 목록 조회로 교체
