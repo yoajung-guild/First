@@ -120,18 +120,16 @@ app.get("/tips", requireLogin, (req, res) => {
 
 app.post("/tips", requireLogin, (req, res) => {
   // TODO(API 연동): POST /api/tips 로 교체
-  const { title, category, content, thumbnail } = req.body;
+  const { title, category, content } = req.body;
   tips.unshift({
-    id: tips.length + 1,
+    id: tips.length ? Math.max(...tips.map((t) => t.id)) + 1 : 1,
     title,
     author: req.session.user.nickname,
     date: new Date().toISOString().slice(0, 10),
     category: category || "기타",
-    likes: 0,
-    thumbnail: thumbnail || "/images/tips/default.jpg",
     content,
   });
-  res.redirect("/"); // 기존: res.redirect("/tips")
+  res.redirect("/");
 });
 
 // ---------- 사진 게시판 ----------
@@ -139,10 +137,14 @@ app.get("/photos", requireLogin, (req, res) => {
   res.render("photos", { pageTitle: "사진첩", photos });
 });
 
-app.post("/tips/:id/delete", requireLogin, (req, res) => {
-  // TODO(API 연동): DELETE /api/tips/:id 로 교체
-  const idx = tips.findIndex((t) => t.id === Number(req.params.id));
-  if (idx !== -1) tips.splice(idx, 1);
+app.post("/tips/:id/edit", requireLogin, (req, res) => {
+  // TODO(API 연동): PATCH /api/tips/:id 로 교체
+  const tip = tips.find((t) => t.id === Number(req.params.id));
+  if (tip) {
+    tip.title = req.body.title || tip.title;
+    tip.category = req.body.category || tip.category;
+    tip.content = req.body.content || tip.content;
+  }
   res.redirect("/");
 });
 
@@ -159,6 +161,16 @@ app.post("/photos", requireLogin, (req, res) => {
   res.redirect("/"); // 기존: res.redirect("/photos")
 });
 
+app.post("/photos/:id/edit", requireLogin, (req, res) => {
+  // TODO(API 연동): PATCH /api/photos/:id 로 교체
+  const photo = photos.find((p) => p.id === Number(req.params.id));
+  if (photo) {
+    photo.title = req.body.title || photo.title;
+    photo.imageUrl = req.body.imageUrl || photo.imageUrl;
+  }
+  res.redirect("/");
+});
+
 app.post("/photos/:id/delete", requireLogin, (req, res) => {
   // TODO(API 연동): DELETE /api/photos/:id 로 교체
   const idx = photos.findIndex((p) => p.id === Number(req.params.id));
@@ -169,6 +181,34 @@ app.post("/photos/:id/delete", requireLogin, (req, res) => {
 // ---------- 길드원 리스트 ----------
 app.get("/members", requireLogin, (req, res) => {
   res.render("members", { pageTitle: "길드원 리스트", members });
+});
+
+app.post("/members", requireLogin, (req, res) => {
+  // TODO(API 연동): POST /api/members 로 교체
+  const { nickname, avatar, intro } = req.body;
+  members.unshift({
+    id: members.length ? Math.max(...members.map((m) => m.id)) + 1 : 1,
+    nickname,
+    job: "미정",
+    level: 1,
+    role: "신입",
+    joinDate: new Date().toISOString().slice(0, 10),
+    status: "오프라인",
+    avatar: avatar || "https://i.pravatar.cc/150?img=12",
+    intro,
+  });
+  res.redirect("/");
+});
+
+app.post("/members/:id/edit", requireLogin, (req, res) => {
+  // TODO(API 연동): PATCH /api/members/:id 로 교체
+  const member = members.find((m) => m.id === Number(req.params.id));
+  if (member) {
+    member.nickname = req.body.nickname || member.nickname;
+    member.avatar = req.body.avatar || member.avatar;
+    member.intro = req.body.intro || member.intro;
+  }
+  res.redirect("/");
 });
 
 app.listen(PORT, () => {
