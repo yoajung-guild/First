@@ -10,16 +10,9 @@
 
 // TODO(API 연동): GET /api/guild-intro 로 교체
 const guildIntro = {
-  title: "요아정은 이런 길드예요 🍫",
-  description:
-    "요아정은 '천천히, 그러나 함께' 를 지향하는 마비노기 모바일 길드입니다.\n초보자도 편하게 적응할 수 있는 분위기를 만들고,\n주 1회 정기 레이드와 자유로운 소통을 이어가고 있어요.",
-  // TODO(API 연동): 실제 서비스에서는 업로드된 길드 이미지 URL 배열로 교체
-  images: [
-    // "/images/guild/1.jpg",
-    // "/images/guild/2.jpg",
-    // "/images/guild/3.jpg",
-    // "/images/guild/4.jpg",
-  ],
+  title: "",
+  description: "",
+  bannerImage: "/images/mainbanner.png",
 };
 
 // TODO(API 연동): GET /api/members  ->  길드원 목록 조회로 교체
