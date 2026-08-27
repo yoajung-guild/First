@@ -4,8 +4,7 @@ const path = require("path");
 
 // TODO(API 연동): 지금은 로컬 목업 데이터를 사용합니다.
 // 실제 서비스 전환 시 이 require 대신 API 클라이언트(axios 등)로 교체하세요.
-const { guildIntro, members, notices, tips, photos, attendance, users } = require("./data/mockData");
-
+const { guildIntro, members, notices, tips, photos, polls, attendance, users } = require("./data/mockData");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
