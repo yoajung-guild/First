@@ -9,6 +9,8 @@
  */
 
 // TODO(API 연동): GET /api/guild-intro 로 교체
+
+
 const guildIntro = {
   title: "",
   description: "",

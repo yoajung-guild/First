@@ -1,6 +1,7 @@
 const express = require("express");
 const session = require("express-session");
 const path = require("path");
+const testApiConnection = require("./data/testApiConnection");
 
 // TODO(API 연동): 지금은 로컬 목업 데이터를 사용합니다.
 // 실제 서비스 전환 시 이 require 대신 API 클라이언트(axios 등)로 교체하세요.
@@ -297,4 +298,7 @@ app.post("/polls/:id/delete", requireLogin, (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`요아정 길드 웹뷰가 http://localhost:${PORT} 에서 실행 중입니다.`);
+  
+  // 서버 시작 직후 API 연동 테스트 실행
+  testApiConnection();
 });
