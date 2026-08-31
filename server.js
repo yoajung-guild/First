@@ -300,5 +300,5 @@ app.listen(PORT, () => {
   console.log(`요아정 길드 웹뷰가 http://localhost:${PORT} 에서 실행 중입니다.`);
   
   // 서버 시작 직후 API 연동 테스트 실행
-  testApiConnection();
+  // testApiConnection();
 });
